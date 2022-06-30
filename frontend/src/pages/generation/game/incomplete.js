@@ -1,102 +1,114 @@
 import React, { useEffect, useState } from 'react'
 
 // Router
-import { useParams, useLocation, useNavigate, Link } from 'react-router-dom'
+import { useParams, useLocation, useNavigate } from 'react-router-dom'
 
 // Utils
 import { convertMsToTime } from '../../../lib/utils'
 
 // Components
 import Loading from '../../../components/Layout/Loading'
-import Silhouttes from '../../../components/Game/Silhouettes'
+import Silhouttes from '../../../components/Generation/Game/Silhouettes'
+import { motion } from 'framer-motion'
 
-// Icons
-import { FaUndo } from 'react-icons/fa'
+
+const containerVariant = {
+    initial: { opacity: 0 },
+    animate: {
+        opacity: 1,
+        transition: {
+            type: "spring",
+            ease: "easeInOut",
+            duration: 0.25
+        }
+    },
+    exit: {
+        y: 200, opacity: 0,
+        transition: {
+            when: "afterChildren",
+            staggerChildren: 0.1,
+            ease: 'easeInOut'
+        }
+    }
+}
+
 
 function Incomplete() {
     const { num: generation, difficulty } = useParams()
     const location = useLocation()
     const navigate = useNavigate()
-    const [correct, setCorrect] = useState(null)
-    const [missed, setMissed] = useState(null)
+    const [results, setResults] = useState(null)
     const [loading, setLoading] = useState(true)
-
-    // guesses
-    // pokemons
-
+    const [time, setTime] = useState(null)
+    const [correct, setCorrect] = useState(null)
 
     useEffect(() => {
-        if (!location.state) {
-            navigate('/')
-        } else {
-            if (correct === null && missed === null) {
-                const { guesses, pokemons } = location.state
-                console.log(location.state)
-                const correctTemp = []
-                let missedTemp = pokemons.filter((item) => guesses.includes(item.name))
-                guesses.forEach((item, idx) => {
-                    if (item === '') {
-                        correctTemp.push(pokemons[idx])
+
+        if (location.state) {
+            const { time: score, pokemons, guesses } = location.state
+            if (results === null && time === null && correct === null) {
+                const num = guesses.filter((item) => item === "").length
+                const updatedPokemons = []
+                pokemons.forEach((item) => {
+                    let temp = { ...item }
+                    if (!guesses.includes(item.name)) {
+                        temp['result'] = 'correct'
+
+                    } else {
+                        temp['result'] = 'wrong'
                     }
+                    updatedPokemons.push(temp)
                 })
-                setCorrect([...correctTemp])
-                setMissed([...missedTemp])
+
+                setCorrect(num)
+                setResults([...updatedPokemons])
+                setTime(score)
             }
-
+        } else {
+            navigate('/')
         }
-    })
+    }, [location.state, results, time, correct, navigate])
 
-    if (!correct && !missed) {
+
+
+    if (!results) {
         return <Loading />
     }
     return (
-        <div className='flex flex-col space-y-5'>
-            <div>
-                <h2>Generation {generation}</h2>
-                <h2 className='capitalize'>Difficulty {difficulty.replace('-', ' ')}</h2>
-                <h2>Your Time: {convertMsToTime(location.state.time)}</h2>
-                <Link to={`/generation/${generation}/${difficulty}/game`}>
-                    <button className='flex items-center space-x-2 text-lg bg-white rounded-md w-max p-2'>
-                        <span>Retry</span> <FaUndo />
-                    </button>
-                </Link>
+        <motion.div
+            variants={containerVariant}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+            className={`${difficulty === 'master' ? 'py-16' : ''} `}>
+
+
+
+            <div className=' bg-white rounded-xl'>
+
+                <div className='select-none flex space-x-6 p-8 items-end bg-stone-500 text-white' >
+                    <span className='text-2xl font-semibold'>{`Score: ${correct}/${results.length}`}</span>
+                    <span className='text-xl '>Time: <span className='font-semibold'>{convertMsToTime(time)}</span></span>
+                    <span className='text-xl '>Generation: <span className='font-semibold'>{generation}</span></span>
+                    <span className='capitalize text-xl'>Difficulty: <span className='font-semibold'>{difficulty}</span></span>
+                </div>
+
+                <ul className={`${loading ? 'blur-md' : ''}  
+                select-none grid 
+                ${difficulty === 'master' ? 'grid-cols-9' : 'grid-cols-6 grid-rows-5'} 
+                gap-6 p-8 `}>
+                    <Silhouttes
+                        setLoading={setLoading}
+                        random={false}
+                        difficulty={difficulty}
+                        generation={generation}
+                        pokemons={results}
+                    />
+                </ul>
 
 
             </div>
-
-            <div className='flex flex-col space-y-10'>
-                <div className='bg-white p-10 rounded-lg flex flex-col space-y-5'>
-                    <h1 className='text-xl font-semibold'>Correct: {correct.length}</h1>
-                    <ul className='grid grid-cols-9 gap-16'>
-                        <Silhouttes
-                            setLoading={setLoading}
-                            random={false}
-                            difficulty={difficulty}
-                            generation={generation}
-                            pokemons={correct}
-                        />
-                    </ul>
-
-                </div>
-
-                <div className='bg-white p-10 rounded-lg flex flex-col space-y-5'>
-                    <h1 className='text-xl font-semibold'>
-                        Missed: {missed.length}
-                    </h1>
-                    <ul className='grid grid-cols-9 gap-16'>
-                        <Silhouttes
-                            setLoading={setLoading}
-                            random={false}
-                            difficulty={difficulty}
-                            generation={generation}
-                            pokemons={missed}
-                        />
-                    </ul>
-
-                </div>
-
-            </div>
-        </div>
+        </motion.div>
     )
 }
 

@@ -1,28 +1,50 @@
-import React, { useEffect, useState, useMemo } from 'react'
+import React, { useEffect, useState } from 'react'
 
 // Utilities
 import { shuffleArray } from '../../../lib/utils'
 
 // Constants
-import { POKEDEX, GEN_SLICE, RANDOM_LEVELS } from '../../../lib/constants'
+import { POKEDEX, GEN_SLICE, DIFFICULTY } from '../../../lib/constants'
 
 // Router
 import { useParams, useNavigate } from 'react-router-dom'
 
-// Components
-import Silhouettes from '../../../components/Game/Silhouettes'
-import GuessInput from '../../../components/Game/GuessInput'
-import Stopwatch from '../../../components/Game/Stopwatch'
-import InstructionsModal from '../../../components/Game/InstructionsModal'
-import GiveUpModal from '../../../components/Game/GiveUpModal'
-import CompleteGame from '../../../components/Game/CompleteGame'
-import Loading from '../../../components/Layout/Loading'
+// Icons
+import { AiFillPlayCircle, AiFillMinusCircle } from 'react-icons/ai'
 
+// Components
+import Silhouettes from '../../../components/Generation/Game/Silhouettes'
+import GuessInput from '../../../components/Generation/Game/GuessInput'
+import Stopwatch from '../../../components/Generation/Game/Stopwatch'
+import InstructionsModal from '../../../components/Generation/Game/InstructionsModal'
+import GiveUpModal from '../../../components/Generation/Game/GiveUpModal'
+import CompleteGame from '../../../components/Generation/Game/CompleteGame'
+import Loading from '../../../components/Layout/Loading'
+import { motion } from 'framer-motion'
+
+
+const containerVariant = {
+    initial: { opacity: 0, y: 200 },
+    animate: {
+        opacity: 1, y: 0,
+        transition: {
+            type: 'spring',
+            mass: 0.5,
+            when: "beforeChildren",
+            staggerChildren: 0.2
+        }
+    },
+    exit: {
+        opacity: 0,
+        transition: {
+            ease: 'easeInOut', duration: 0.5
+        }
+    }
+}
 
 function Game() {
     const { num: generation, difficulty } = useParams()
     const navigate = useNavigate()
-    const difficultLevel = useMemo(() => RANDOM_LEVELS.includes(difficulty), [difficulty, RANDOM_LEVELS])
     const [loading, setLoading] = useState(true)
     const [guesses, setGuesses] = useState(null)
     const [pokemons, setPokemons] = useState(null)
@@ -39,16 +61,23 @@ function Game() {
     useEffect(() => {
         if (guesses === null && pokemons === null) {
             let allPokemons = POKEDEX.slice(GEN_SLICE[generation].start, GEN_SLICE[generation].end + 1)
-            if (difficultLevel) {
-                allPokemons = shuffleArray(allPokemons)
+            if (difficulty !== 'master') {
+                if (DIFFICULTY[difficulty].random) {
+                    allPokemons = shuffleArray(allPokemons).splice(0, 30)
+                } else {
+                    const max = (GEN_SLICE[generation].end + 1) - 30
+                    const slotEnd = Math.floor(Math.random() * max) + GEN_SLICE[generation].start
+                    const slotStart = slotEnd - 30
+                    allPokemons = POKEDEX.slice(slotStart, slotEnd)
+                }
             }
+
             let onlyNames = allPokemons.map((item) => item.name)
             setGuesses([...onlyNames])
             setPokemons([...allPokemons])
 
         }
-    }, [difficulty, guesses, difficultLevel, generation, pokemons])
-
+    }, [difficulty, guesses, generation, pokemons])
 
 
     // Game State - In Progress
@@ -56,15 +85,14 @@ function Game() {
         if (gameState === 'progress' && guesses.every((item) => item !== '' && !loading)) {
             setIsActive(true)
         }
-    }, [gameState, guesses])
+    }, [gameState, guesses, loading])
 
 
     // Game State - Completed
     useEffect(() => {
-        if (guesses !== null && guesses.every((item) => item === '')) {
+        if (guesses !== null && guesses.length >= 30 && guesses.every((item) => item === '')) {
             setGameState('complete')
             setIsActive(false)
-
             setTimeout(() => {
                 navigate(
                     `/generation/${generation}/${difficulty}/game/results`,
@@ -73,7 +101,7 @@ function Game() {
             }, [2500])
 
         }
-    }, [guesses])
+    }, [guesses, generation, difficulty, navigate, time])
 
 
 
@@ -124,42 +152,50 @@ function Game() {
 
     }
 
-
     return (
-        <div>
+        <motion.div
+            variants={containerVariant}
+            initial={false}
+            animate="animate"
+            exit="exit"
+            className={`${difficulty === "master" ? 'py-10' : ''} `}>
 
             {loading && <Loading />}
 
-            {(gameState === 'pause' && !loading) &&
-                <InstructionsModal
-                    setGameState={setGameState}
-                    difficulty={difficulty}
-                    generation={generation}
-                />
-            }
 
-            {giveUp &&
-                <GiveUpModal
-                    giveUp={giveUp}
-                    setGiveUp={setGiveUp}
-                    handleGiveUp={handleGiveUp}
-                />
-            }
+            <InstructionsModal
+                show={gameState === 'pause' && !loading}
+                setGameState={setGameState}
+                difficulty={difficulty}
+                generation={generation}
+            />
+
+            <GiveUpModal
+                giveUp={giveUp}
+                setGiveUp={setGiveUp}
+                handleGiveUp={handleGiveUp}
+            />
+
+            <CompleteGame
+                show={gameState === 'complete'}
+            />
 
 
-            <CompleteGame show={gameState === 'complete'} />
 
-            <h1 className='text-2xl'>Generation {generation}</h1>
-
-            {gameState === 'progress' &&
-                <div className='  flex space-x-5'>
+            {!loading &&
+                <div className={` ${gameState === 'pause' ? 'blur-md' : ''}  select-none flex space-x-8 mb-8`}>
+                    <button onClick={() => navigate(`/generation/${generation}/difficulty`)} className='w-[100px] border-[10px] border-[#707176] text-[#707176] font-arcade font-semibold flex-0   bg-white rounded-xl flex flex-col space-y-1 items-center justify-center transition-all duration-150 ease-in-out active:scale-90'>
+                        <AiFillPlayCircle className='text-2xl rotate-180' />
+                        <span>Back</span>
+                    </button>
                     <Stopwatch
                         time={time}
                         setTime={setTime}
                         isActive={isActive}
                     />
-                    <button onClick={() => setGiveUp(true)} className='bg-red-500 text-white px-5 rounded-xl'>
-                        Give Up
+                    <button onClick={() => setGiveUp(true)} className='w-[100px] border-[10px] border-[#cf3838] text-[#cf3838] font-arcade font-semibold flex-0   bg-white rounded-xl flex flex-col space-y-1 items-center justify-center transition-all duration-150 ease-in-out active:scale-90'>
+                        <AiFillMinusCircle className='text-2xl' />
+                        <span>Quit</span>
                     </button>
                 </div>
             }
@@ -167,17 +203,33 @@ function Game() {
 
 
 
+
             {(pokemons && guesses) &&
-                <ul className={`${gameState === 'pause' ? 'blur-md' : ''} ${loading ? 'hidden' : 'visible'} grid grid-cols-9  gap-16 py-20 transition-all ease-in-out`}>
-                    <Silhouettes
-                        setLoading={setLoading}
-                        random={RANDOM_LEVELS.includes(difficulty)}
-                        difficulty={difficulty}
-                        generation={generation}
-                        pokemons={pokemons}
-                        guesses={guesses}
-                    />
-                </ul>
+                <div className={`
+                ${gameState === 'pause' ? 'blur-md' : ''} 
+                ${loading ? 'hidden' : 'visible'} 
+                rounded-xl transition-all ease-in-out 
+                border-[12px] border-t-[#A1884F] border-l-[#A1884F] border-r-[#795F28] border-b-[#795F28] bg-pokemonStorage bg-center bg-repeat
+                `}>
+                    <ul className={`
+                ${gameState === 'pause' ? 'blur-md' : ''} 
+                ${loading ? 'hidden' : 'visible'} 
+                ${difficulty === 'master' ? 'grid-cols-9' : 'grid-cols-6 grid-rows-5'} 
+                grid  gap-6 p-6
+                transition-all ease-in-out 
+                border-[12px] border-l-[#E0F8A7] border-t-[#E0F8A7] border-r-[#56861E] border-b-[#56861E] select-none
+                `}>
+                        <Silhouettes
+                            setLoading={setLoading}
+                            random={DIFFICULTY[difficulty].random}
+                            difficulty={difficulty}
+                            generation={generation}
+                            pokemons={pokemons}
+                            guesses={guesses}
+                        />
+                    </ul>
+                </div>
+
             }
 
 
@@ -193,7 +245,7 @@ function Game() {
                 </form>
             }
 
-        </div >
+        </motion.div >
     )
 }
 

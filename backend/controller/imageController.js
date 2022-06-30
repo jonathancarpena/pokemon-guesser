@@ -14,6 +14,7 @@ export const get_Image = async (req, res) => {
     try {
         const imgPath = `${imageFolder}/${generation}/${id}.png`
         const img = fs.readFileSync(imgPath)
+        // console.log(generation, id)
         //response header, use set
         res.set('Content-Type', 'image/png')
         res.send(img)

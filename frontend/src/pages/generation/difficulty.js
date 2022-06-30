@@ -5,111 +5,81 @@ import { useNavigate, useParams } from 'react-router-dom'
 
 // Components
 import { motion } from 'framer-motion'
+import Options from '../../components/Generation/Difficulty/Options'
+import Display from '../../components/Generation/Difficulty/Display'
 
-// Icons
-import { FaCheck } from 'react-icons/fa'
+const containerVariant = {
+    initial: { opacity: 0, y: 200 },
+    animate: {
+        opacity: 1, y: 0,
+        transition: {
+            type: 'spring',
+            mass: 0.5,
+            when: "beforeChildren",
+            staggerChildren: 0.2
+        }
+    },
+    exit: {
+        opacity: 0,
+        transition: {
+            ease: 'easeInOut', duration: 0.5
+        }
+    }
+}
 
 
 
 function Difficulty() {
     const { num } = useParams()
     const navigate = useNavigate()
-    const [difficulty, setDifficulty] = useState(null)
-
-    const levels = [
-        {
-            value: 'very easy',
-            rules: 'In Order, Silhouette, Cry'
-        },
-        {
-            value: 'easy',
-            rules: 'In Order, Silhouette, No Cry'
-        },
-        {
-            value: 'medium',
-            rules: 'In Order, Cry, No Silhouette'
-        },
-        {
-            value: 'hard',
-            rules: 'In Order, No Silhouette, No Cry'
-        },
-        {
-            value: 'very hard',
-            rules: 'Random, Silhouette, Cry'
-        },
-        {
-            value: 'expert',
-            rules: 'Random, Silhouette, No Cry'
-        },
-        {
-            value: 'insane',
-            rules: 'Random, Cry, No Silhouette'
-        },
-        {
-            value: 'master',
-            rules: 'Random, No Silhouette, No Cry'
-        },
-    ]
+    const [difficulty, setDifficulty] = useState('easy')
 
     function handleCheck(value) {
-        if (value === difficulty) {
-            setDifficulty(null)
-        } else {
+        if (value !== difficulty) {
             setDifficulty(value)
         }
     }
 
-
     return (
-        <motion.div
-            initial={{ width: 0 }}
-            animate={{ width: '100%' }}
-            exit={{ x: window.innerWidth, transition: { duration: 0.1 } }}
+        <div
+            className=' w-full flex items-center justify-center font-arcade select-none'
         >
-            <h1 className='font-bold text-3xl'>
-                Choose Difficulty
-            </h1>
 
-            <div className='flex flex-col space-y-5'>
-                {levels.map((item) => (
-                    <div key={item.value} className='flex items-start space-x-3'>
-                        <button
-                            onClick={() => handleCheck(item.value)}
-                            value={item.value}
-                            className={`
-                                ${item.value === difficulty ? 'bg-blue-500 ring-blue-500 hover:bg-blue-400 hover:ring-blue-400' : 'bg-gray-100 ring-neutral-500 hover:bg-white'} 
-                                flex items-center justify-center relative top-1.5 
-                                
-                                transition-all ease-in-out duration-150
-                                w-[20px] h-[20px] ring-2 rounded-sm
-                            `}>
-                            {item.value === difficulty &&
-                                <FaCheck className={`text-white text-sm `} />
-                            }
+            <motion.div
+                variants={containerVariant}
+                animate="animate"
+                initial="initial"
+                exit="exit"
+                className='flex  relative'>
+                <h1 className='-top-[5rem] left-10 absolute font-bold text-4xl w-max'>
+                    Choose Difficulty: <span className='capitalize underline underline-offset-4'>{difficulty}</span>
+                </h1>
+                <Options
+                    handleCheck={handleCheck}
+                    difficulty={difficulty}
+                />
+                <Display difficulty={difficulty} />
 
-                        </button>
-                        <div onClick={() => handleCheck(item.value)} className='cursor-pointer'>
-                            <span className='text-lg font-semibold capitalize'>{item.value}</span>
-                            <p>{item.rules}</p>
-                        </div>
-                    </div>
-                ))}
-            </div>
-
-
-            <button
-                onClick={() => navigate(`/generation/${num}/${difficulty.replace(' ', '-')}/game`)}
-                disabled={!difficulty}
-                className={`
-                    ${difficulty ? 'opacity-100 hover:animate-pulse cursor-pointer' : 'opacity-0 cursor-default'} 
-                    bg-blue-500 w-[200px] py-3 rounded-lg text-lg text-white font-semibold  
-                    transition-all ease-in-out duration-150
+                <button
+                    onClick={() => navigate(`/generation/${num}/${difficulty.replace(' ', '-')}/game`)}
+                    disabled={!difficulty}
+                    className={`
+                    ${difficulty ? 'hover:scale-110 active:scale-90 opacity-100 cursor-pointer' : 'opacity-0 cursor-default'} 
+                   bg-blue-500 w-[300px] h-[70px] overflow-hidden rounded-lg text-4xl text-black font-semibold  
+                    transition-all ease-in-out duration-150 -top-[6rem] right-0 absolute border-[6px] border-blue-700
                 `}>
+                    <span className=' text-white'>Continue</span>
+                    <span className='left-0 -bottom-4 absolute w-full z-0 bg-blue-600 h-[50%]'></span>
 
-                Continue
-            </button>
+                </button>
+            </motion.div>
 
-        </motion.div>
+
+
+
+
+
+        </div>
 
     )
 }

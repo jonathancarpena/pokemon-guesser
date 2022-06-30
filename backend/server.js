@@ -17,7 +17,7 @@ import audioRoutes from './routes/audioRoute.js'
 // import fs from 'fs'
 
 // const __dirname = path.dirname(dirname(fileURLToPath(import.meta.url)))
-// const audioPath = `${__dirname}/backend/audio/4`
+// const audioPath = `${__dirname}/backend/audio/7`
 
 // fs.readdir(audioPath, (err, filenames) => {
 //     if (err) {
@@ -26,9 +26,11 @@ import audioRoutes from './routes/audioRoute.js'
 //     } else {
 
 //         filenames.forEach((item, idx) => {
-//             const id = item.split(' - ')[0]
+//             const id = item.split('.')[0]
+
 //             let originalName = `${audioPath}/${item}`
 //             let newName = `${audioPath}/${id}.wav`
+//             console.log(id)
 //             fs.rename(originalName, newName, () => {
 //                 console.log("\nFile Renamed!\n");
 //             })

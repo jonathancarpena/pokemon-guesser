@@ -9,6 +9,12 @@ module.exports = {
         'body': ["Verdana"],
         'arcade': ["Electrolize"]
       },
+      backgroundImage: {
+        'pokemonStorage': "url('./images/misc/bg.jpg')",
+      },
+      dropShadow: {
+        'text': '6px 6px 0px rgba(0,0,0,1)',
+      },
       colors: {
         black: '#1F2937',
         sub: '#808486',

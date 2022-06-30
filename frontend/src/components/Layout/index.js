@@ -1,31 +1,68 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 
 // Router
-import { Link, useLocation } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 
 // Icons
-import { FaHome } from 'react-icons/fa'
+import HomeButton from './HomeButton'
+import MobileAlert from './MobileAlert';
 
-// Components 
-import { AnimatePresence } from 'framer-motion'
+
+function getWindowDimensions() {
+    const { innerWidth: width, innerHeight: height } = window;
+    return {
+        width,
+        height
+    };
+}
+
+function useWindowDimensions() {
+    const [windowDimensions, setWindowDimensions] = useState(getWindowDimensions());
+
+    useEffect(() => {
+        function handleResize() {
+            setWindowDimensions(getWindowDimensions());
+        }
+
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+    return windowDimensions;
+}
 
 function Layout({ children }) {
     const { pathname } = useLocation()
-    return (
-        <AnimatePresence>
-            <div className={` text-black relative  flex items-center justify-center  bg-gray-200 min-h-screen mx-auto`}>
+    const { width } = useWindowDimensions()
 
-                {pathname.includes('') &&
-                    <Link to='/'>
-                        <div className='flex space-x-2 items-center fixed top-10 left-10 text-black'>
-                            <FaHome className='' />
-                            <span>Home</span>
-                        </div>
-                    </Link>
-                }
-                {children}
-            </div>
-        </AnimatePresence>
+
+    const homeButtonPages = ['rankings', 'difficulty', 'incomplete', 'results']
+
+    function isVisible() {
+        let visible;
+        const split = pathname.split('/')
+        const page = split[split.length - 1]
+        if (homeButtonPages.includes(page)) {
+            visible = true
+        } else {
+            visible = false
+        }
+        return visible
+    }
+    return (
+
+        <div className={` text-black relative  flex items-center justify-center  bg-gray-200 min-h-screen mx-auto`}>
+            {width >= 1980
+                ?
+                <>
+                    <HomeButton isVisible={isVisible()} />
+                    {children}
+                </>
+                : <MobileAlert />
+            }
+
+        </div>
+
     )
 }
 

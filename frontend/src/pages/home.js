@@ -1,84 +1,169 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 
 // Router
 import { Link } from 'react-router-dom'
 
 // Components
-import { motion } from 'framer-motion'
-
-// Icons
-import { FaTrophy } from 'react-icons/fa'
+import { motion, useAnimation } from 'framer-motion'
+import OptionButton from '../components/Home/OptionButton'
+import RankingButton from '../components/Home/RankingButton'
+import Guesser from '../components/Home/Guesser'
 
 // Utils
 import { randomItem } from '../lib/utils'
 
 // Images - Pokemon Starter Sprites
-import gen1_Grass from '../images/starters/gen1-grass.png'
-import gen1_Fire from '../images/starters/gen1-fire.png'
-import gen1_Water from '../images/starters/gen1-water.png'
-import gen2_Grass from '../images/starters/gen2-grass.png'
-import gen2_Fire from '../images/starters/gen2-fire.png'
-import gen2_Water from '../images/starters/gen2-water.png'
-import gen3_Grass from '../images/starters/gen3-grass.png'
-import gen3_Fire from '../images/starters/gen3-fire.png'
-import gen3_Water from '../images/starters/gen3-water.png'
-import gen4_Grass from '../images/starters/gen4-grass.png'
-import gen4_Fire from '../images/starters/gen4-fire.png'
-import gen4_Water from '../images/starters/gen4-water.png'
+import { GENERATION_STYLES } from '../lib/constants'
 
 
-const GRASS_STARTERS = [gen1_Water, gen2_Water, gen3_Water, gen4_Water]
-const FIRE_STARTERS = [gen1_Fire, gen2_Fire, gen3_Fire, gen4_Fire]
-const WATER_STARTERS = [gen1_Grass, gen2_Grass, gen3_Grass, gen4_Grass]
-const GENERATION_STYLES = {
-    grass: GRASS_STARTERS,
-    fire: FIRE_STARTERS,
-    water: WATER_STARTERS
+
+const containerVariant = {
+    initial: { opacity: 0, y: 200, x: 0 },
+    animate: {
+        opacity: 1, y: 0, x: 0,
+        transition: {
+            type: 'spring',
+            mass: 0.5,
+            when: "beforeChildren",
+            staggerChildren: 0.2
+        }
+    },
+    exit: {
+        y: 200, opacity: 0,
+        transition: {
+            ease: 'easeInOut', duration: 0.25
+        }
+    }
+}
+
+const childVariant = {
+    initial: { opacity: 0, y: 100, x: -100 },
+    animate: { opacity: 1, y: 0, x: 0, }
+}
+
+const imgVariant = {
+    hover: {
+        y: 2,
+        transition: {
+            duration: 0.1,
+            repeat: Infinity,
+            repeatType: "mirror",
+            ease: "linear",
+            delay: 0.25
+        }
+    },
+
 }
 
 
 
+
+
 function Home() {
+    const [starters, setStarters] = useState(null)
+    const controls = useAnimation();
+
+
+    useEffect(() => {
+        if (starters === null) {
+            const type = randomItem(Object.keys(GENERATION_STYLES))
+            setStarters([...GENERATION_STYLES[type]])
+            controls.start("animate");
+        }
+    }, [controls, starters])
+
+
     return (
-        <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className='flex flex-col items-center space-y-10'
-        >
+        starters && (
+            <motion.div
+                variants={containerVariant}
+                initial='initial'
+                animate='animate'
+                exit="exit"
+                className='flex flex-col items-center space-y-10 select-none'
+            >
 
-            <h1 className='font-arcade text-5xl font-semibold text-center uppercase'>
-                Pokemon Guesser
-            </h1>
-            <ul className='flex flex-col space-y-5 text-xl'>
-                {GENERATION_STYLES[randomItem(Object.keys(GENERATION_STYLES))].map((item, idx) => (
-                    <li key={`generation-${idx}`} className='flex space-x-3 '>
-                        <Link to={`/generation/${idx + 1}`}>
-                            <button className={`
-                                
-                                bg-neutral-100 px-10 py-5 rounded-md    drop-shadow-md 
-                                 hover:scale-110 hover:bg-white hover:drop-shadow-lg 
-                                transition-all ease-in-out duration-150 flex space-x-2 items-center`}>
-                                <span className='font-arcade uppercase font-semibold'>
-                                    Generation {idx + 1}
-                                </span>
-                                <img src={item} className='h-full w-auto' />
-                            </button>
-                        </Link>
-                        <Link to={`/rankings/generation/${idx + 1}`}>
-                            <button className={`
-                                h-full bg-neutral-100 px-6 py-3 rounded-md   drop-shadow-md 
-                                  hover:scale-110 hover:bg-white hover:drop-shadow-lg 
-                                    transition-all ease-in-out duration-150`}>
-                                <FaTrophy />
-                            </button>
-                        </Link>
-                    </li>
-                ))}
+                <h1 className='font-arcade text-5xl font-semibold text-center uppercase'>
+                    Pokemon <Guesser color={starters[0].accent} />
+                </h1>
 
-            </ul>
-        </motion.div>
 
+                <div className='grid grid-cols-2 gap-10'>
+                    <ul
+                        className='flex flex-col space-y-5 text-xl'>
+                        {starters.slice(0, 4).map((item, idx) => (
+                            <motion.li
+                                variants={childVariant}
+                                key={`generation-${idx}`} className='flex space-x-5 '>
+                                <Link to={`/generation/${idx + 1}`}>
+                                    <OptionButton accent={item.accent} accent2={item.accent2}>
+                                        <span className='font-arcade uppercase font-semibold pr-7'>
+                                            Generation {idx + 1}
+                                        </span>
+                                        <motion.span
+                                            variants={imgVariant}
+                                            whileHover='hover'
+                                            className='pr-5  w-full left-0 h-full flex items-center justify-end absolute '>
+                                            <img
+                                                alt={item.img}
+                                                src={item.img}
+                                                className='h-[40px] w-auto  mb-1'
+                                            />
+                                        </motion.span>
+
+
+                                    </OptionButton>
+                                </Link>
+                                <Link to={`/generation/${idx + 1}/rankings`}>
+                                    <OptionButton accent={'bg-yellow-500'} >
+                                        <RankingButton />
+                                    </OptionButton>
+                                </Link>
+                            </motion.li>
+                        ))}
+                    </ul>
+
+                    <ul
+                        className='flex flex-col space-y-5 text-xl'>
+                        {starters.slice(4, starters.length).map((item, idx) => (
+                            <motion.li
+                                variants={childVariant}
+                                key={`generation-${idx}`} className='flex space-x-5 '>
+                                <Link to={`/generation/${idx + 5}`}>
+                                    <OptionButton accent={item.accent} accent2={item.accent2}>
+                                        <span className='font-arcade uppercase font-semibold pr-7'>
+                                            Generation {idx + 5}
+                                        </span>
+                                        <motion.span
+                                            variants={imgVariant}
+                                            whileHover='hover'
+                                            className='pr-5  w-full left-0 h-full flex items-center justify-end absolute '>
+                                            <img
+                                                alt={item.img}
+                                                src={item.img}
+                                                className={`h-[40px] w-auto mb-1 `}
+                                            />
+                                        </motion.span>
+
+
+                                    </OptionButton>
+                                </Link>
+                                <Link to={`/generation/${idx + 1}/rankings`}>
+                                    <OptionButton accent={'bg-yellow-500'} >
+                                        <RankingButton />
+                                    </OptionButton>
+                                </Link>
+                            </motion.li>
+                        ))}
+                    </ul>
+                </div>
+
+
+
+            </motion.div >
+
+
+        )
     )
 }
 
