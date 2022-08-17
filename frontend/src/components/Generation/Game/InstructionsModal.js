@@ -111,7 +111,7 @@ function InstructionsModal({ show, setGameState, difficulty, generation }) {
                                                 <h4 className="text-2xl">
                                                     Info:
                                                 </h4>
-                                                <p>{`A random slice of 30 Pokemon are taken from the Generation ${generation} Pokedex (E.g. 1-30, 60-90). You will be timed on how fast you can guess all 30 Pokemons. Good Luck!`}</p>
+                                                <p>{`A random slice of 30 Pokemon are taken from the Generation ${generation} Pokedex (E.g. Gen1: 1-30, 60-90). You will be timed on how fast you can guess all 30 Pokemons. Good Luck!`}</p>
                                             </div>
 
 

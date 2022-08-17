@@ -131,6 +131,7 @@ function Silhouttes({ random, pokemons, guesses, difficulty, generation, setLoad
 
     function allLoaded() {
         if (DIFFICULTY[difficulty].cry && DIFFICULTY[difficulty].shape) {
+
             if (audioTemp.every((item) => item === '') && imgTemp.every((item) => item === '')) {
                 setLoading(false)
             }

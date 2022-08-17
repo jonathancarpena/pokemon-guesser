@@ -60,6 +60,7 @@ function Game() {
     // Setting Up Pokemons
     useEffect(() => {
         if (guesses === null && pokemons === null) {
+
             let allPokemons = POKEDEX.slice(GEN_SLICE[generation].start, GEN_SLICE[generation].end + 1)
             if (difficulty !== 'master') {
                 if (DIFFICULTY[difficulty].random) {
@@ -78,6 +79,7 @@ function Game() {
 
         }
     }, [difficulty, guesses, generation, pokemons])
+
 
 
     // Game State - In Progress

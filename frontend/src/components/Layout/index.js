@@ -51,10 +51,9 @@ function Layout({ children }) {
     }
     return (
 
-        <div className={` text-black relative  flex items-center justify-center  bg-gray-200 min-h-screen mx-auto`}>
+        <div className={`  text-black relative  flex items-center justify-center  bg-gray-200 min-h-screen mx-auto`}>
             {width >= 1980
-                ?
-                <>
+                ? <>
                     <HomeButton isVisible={isVisible()} />
                     {children}
                 </>

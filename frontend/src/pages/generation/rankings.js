@@ -68,7 +68,7 @@ function GenerationRanking() {
 
             <h1 className='ring-8 drop-shadow-md ring-neutral-400 font-arcade flex flex-col items-center justify-center text-center text-4xl  space-y-2 py-3 px-6  bg-white rounded-xl  w-max'>
                 <span className='uppercase font-bold'>Generation {generation} Rankings</span>
-                <span className='text-xl font-arcade font-semibold underline underline-offset-2'>{moment(Date.now()).format('MMM DD, YYYY')}</span>
+                <span className='text-xl font-arcade font-semibold '>as of <span className='underline underline-offset-2'>{moment(Date.now()).format('MMM DD, YYYY')}</span></span>
             </h1>
 
 
