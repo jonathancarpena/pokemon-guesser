@@ -5,11 +5,9 @@
 	"type": "module",
 	"main": "server.js",
 	"scripts": {
-		"start": "node backend/server.js",
-		"server": "nodemon backend/server.js",
-		"client": "npm start --prefix frontend",
-		"dev": "concurrently \"npm run server\" \"npm run client\"",
-		"data:import": "node backend/seeder/script.js"
+		"start": "node server.js",
+		"server": "nodemon server.js",
+		"data:import": "node seederScript.js"
 	},
 	"author": "",
 	"license": "ISC",

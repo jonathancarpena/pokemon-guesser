@@ -1,12 +1,12 @@
 import React, { useRef, useState } from 'react'
 
 // Utilities
-import API from '../../../lib/api'
 import { DIFFICULTY } from '../../../lib/constants'
 
 // Icons
 import { FaRegQuestionCircle } from 'react-icons/fa'
 import { AiFillSound } from 'react-icons/ai'
+
 
 
 export const SingleSilhoutte = ({ name, onAudioLoad = () => null, onImgLoad = () => null, random = false, correct = true, id, generation, shape = true, cry = true, idx, result = null }) => {
@@ -63,15 +63,12 @@ export const SingleSilhoutte = ({ name, onAudioLoad = () => null, onImgLoad = ()
                         onEnded={() => setSoundOn(false)}
                         onLoadStart={() => onAudioLoad(idx)}
                         ref={audioRef}
-                        src={`${API.audio}/${generation}/${id}`}
+                        src={`/cries/${generation}/${id}.wav`}
                     />
                     {soundOn &&
-
                         <AiFillSound className={`absolute text-[20px] z-[20] 
                              ${correct ? 'top-[50%] -translate-y-[50%] text-white' : 'bottom-1 text-black'}  left-[50%] -translate-x-[50%]
                              transition-all ease-in-out duration-200`} />
-
-
                     }
                 </>
 
@@ -91,7 +88,7 @@ export const SingleSilhoutte = ({ name, onAudioLoad = () => null, onImgLoad = ()
                 <img
                     className='w-[80px] h-[80px] max-w-[80px] max-h-[80px] object-contain'
                     onLoad={() => onImgLoad(idx)}
-                    src={`${API.image}/${generation}/${id}`}
+                    src={`/pokemon/${generation}/${id}.png`}
                     alt={`pokemon-order-${idx}`} />
 
                 <span className={`${correct ? 'visible -bottom-5' : 'hidden'}  w-max absolute left-[50%] -translate-x-[50%] capitalize font-semibold`}>
@@ -111,7 +108,7 @@ function Silhouttes({ random, pokemons, guesses, difficulty, generation, setLoad
     let audioTemp = [...pokemons]
 
     function onAudioLoad(index,) {
-        // console.log('Audio Loading ', index)
+        console.log('Audio Loading ', index)
         audioTemp[index] = ''
         if (audioTemp.every((item) => item === '')) {
             console.log('ALL AUDIO LOADED')

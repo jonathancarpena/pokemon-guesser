@@ -1,22 +1,23 @@
 {
-  "name": "pokemon-guesser",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/jonathancarpena/pokemon-guesser.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/jonathancarpena/pokemon-guesser/issues"
-  },
-  "homepage": "https://github.com/jonathancarpena/pokemon-guesser#readme",
-  "devDependencies": {
-    "concurrently": "^7.3.0"
-  }
+	"name": "pokemon-guesser",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"dev": "concurrently \"npm run server --prefix backend\" \"npm run start --prefix frontend\"",
+		"server": "npm run start --prefix backend"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/jonathancarpena/pokemon-guesser.git"
+	},
+	"author": "",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/jonathancarpena/pokemon-guesser/issues"
+	},
+	"homepage": "https://github.com/jonathancarpena/pokemon-guesser#readme",
+	"devDependencies": {
+		"concurrently": "^7.3.0"
+	}
 }

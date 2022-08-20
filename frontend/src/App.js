@@ -10,6 +10,7 @@ import Results from './pages/generation/game/results';
 import Incomplete from './pages/generation/game/incomplete';
 import GenerationRankings from './pages/generation/rankings';
 import NotFound from './pages/404'
+import Test from './pages/test'
 
 // Components
 import { AnimatePresence } from 'framer-motion';
@@ -32,6 +33,7 @@ const AnimatedRoutes = () => {
     <AnimatePresence exitBeforeEnter>
       <Routes location={location} key={generateKey(location)}>
         <Route exact path='/' element={<Home />} />
+        <Route exact path='/test' element={<Test />} />
         <Route exact path='/generation/:num' element={<Generation />} />
         <Route exact path='/generation/:num/difficulty' element={<Difficulty />} />
         <Route exact path='/generation/:num/:difficulty/game' element={<Game />} />
