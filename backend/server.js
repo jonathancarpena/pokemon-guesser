@@ -9,8 +9,6 @@ import connectDB from './config/db.js'
 
 // Routes
 import scoreRoutes from './routes/scoreRoutes.js'
-import imageRoutes from './routes/imageRoute.js'
-import audioRoutes from './routes/audioRoute.js'
 
 // import path, { dirname } from 'path'
 // import { fileURLToPath } from 'url';
@@ -59,8 +57,6 @@ app.use(urlencoded({
 
 // Routes: (extension, routes)
 app.use("/api/scores", scoreRoutes)
-app.use('/image', imageRoutes)
-app.use('/audio', audioRoutes)
 
 
 // Port server is running on
