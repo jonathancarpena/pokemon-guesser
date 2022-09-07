@@ -17,7 +17,7 @@
 <img src="./screenshots/ranking.PNG" width="690" height="375" alt="ranking">
 </ul>
 
-## Demo
+## Live Demo
 
 <a href="https://jonathancarpena.me/demo/Pokemon%20Guesser" target="_blank" rel="noopener noreferrer">Click
 Here</a>
