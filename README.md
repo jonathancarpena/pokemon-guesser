@@ -2,12 +2,12 @@
 
 > A web app guessing game that uses various Pokemon's silhouette and/or cry.
 
-## Objective
+## 🚀 Objective
 
 > To build upon a previous project that was developed for a hackathon and polish
 > it with more features, more pokemons, and more animations.
 
-## Screenshots
+## 📸 Screenshots
 
 <ul style="display:flex flex-direction:column">
 <img src="./screenshots/landing.PNG" width="690" height="375" alt="landing"> 
@@ -17,12 +17,12 @@
 <img src="./screenshots/ranking.PNG" width="690" height="375" alt="ranking">
 </ul>
 
-## Live Demo
+## 🎥 Live Demo
 
 <a href="https://jonathancarpena.me/work/demo/Pokemon%20Guesser" target="_blank" rel="noopener noreferrer">Click
 Here 🔗</a>
 
-## Features
+## 📋 Features
 
 -  5 Game difficulty options.
    -  Easy: Pokedex Order + Pokemon Silhouette.
@@ -35,7 +35,7 @@ Here 🔗</a>
 -  High Score Table for each Pokemon generation and different levels.
 -  Desktop Only.
 
-## Technologies
+## ⚙ Technologies
 
 ### Front End:
 
@@ -52,11 +52,10 @@ Here 🔗</a>
 -  Node.js
 -  Heroku
 
-
-## Installation and Setup
-
+## 🛠 Installation and Setup
 
 ### Install
+
 Clone down this repository. You will need node and npm installed globally on
 your machine.
 
