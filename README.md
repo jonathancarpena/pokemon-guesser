@@ -53,7 +53,7 @@ Here 🔗</a>
 -  Heroku
 
 
-## Setup
+## Installation and Setup
 
 
 ### Install
