@@ -19,7 +19,7 @@
 
 ## Live Demo
 
-<a href="https://jonathancarpena.me/demo/Pokemon%20Guesser" target="_blank" rel="noopener noreferrer">Click
+<a href="https://jonathancarpena.me/work/demo/Pokemon%20Guesser" target="_blank" rel="noopener noreferrer">Click
 Here</a>
 
 ## Features
