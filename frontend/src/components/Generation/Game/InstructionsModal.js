@@ -89,17 +89,17 @@ function InstructionsModal({ show, setGameState, difficulty, generation }) {
                                                 <h4 className="text-2xl">
                                                     Conditions:
                                                 </h4>
-                                                <ul className='flex space-x-2 '>
+                                                <ul className='flex space-x-2 text-sm'>
                                                     {difficulty === 'master'
                                                         ? <>
                                                             <span>All Pokemon,</span>
-                                                            <span>No Pokemon Silhouette,</span>
-                                                            <span>No Pokemon Cries</span>
+                                                            <span className="line-through">Pokemon Silhouette,</span>
+                                                            <span className="line-through">Pokemon Cries</span>
                                                         </>
                                                         : <>
-                                                            <span>{DIFFICULTY[difficulty].random ? 'Random Order' : 'Pokedex Order'},</span>
-                                                            <span>{DIFFICULTY[difficulty].shape ? 'Pokemon Silhouette' : 'No Pokemon Silhouette'} </span>
-                                                            <span>{DIFFICULTY[difficulty].cry ? '' : 'No Pokemon Cry'}</span>
+                                                            <span>{DIFFICULTY[difficulty].random ? 'Random Order' : 'Pokedex ID Order'},</span>
+                                                            <span className={`${DIFFICULTY[difficulty].shape ? '' : 'line-through'}`}>Pokemon Silhouette,</span>
+                                                            <span className={`${DIFFICULTY[difficulty].cry ? '' : 'line-through'}`}>Pokemon Cry</span>
                                                         </>
                                                     }
 
@@ -111,7 +111,13 @@ function InstructionsModal({ show, setGameState, difficulty, generation }) {
                                                 <h4 className="text-2xl">
                                                     Info:
                                                 </h4>
-                                                <p>{`A random slice of 30 Pokemon are taken from the Generation ${generation} Pokedex (E.g. Gen1: 1-30, 60-90). You will be timed on how fast you can guess all 30 Pokemons. Good Luck!`}</p>
+
+                                                <p>
+                                                    {difficulty === "master"
+                                                        ? `All Pokemon are taken from the Generation ${generation} Pokedex. You will be timed on how fast you can guess all the Pokemons. Good Luck!`
+                                                        : `A random slice of 30 Pokemon are taken from the Generation ${generation} Pokedex (E.g. Gen1: 1-30, 60-90). You will be timed on how fast you can guess all 30 Pokemons. Good Luck!`
+                                                    }
+                                                </p>
                                             </div>
 
 

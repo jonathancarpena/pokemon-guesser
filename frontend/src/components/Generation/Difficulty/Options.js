@@ -39,7 +39,11 @@ function SingleOption({ random, shape, cry, handleCheck, difficulty, option, acc
                 <div className='cursor-pointer'>
                     <span className='text-xl  capitalize'>{option}</span>
                     <ul className='flex space-x-2 text-sm'>
-                        <span>{random ? 'Random' : 'Pokedex Order'},</span>
+                        {option === 'master'
+                            ? <span>All Pokemon,</span>
+                            : <span>{random ? 'Random' : 'Pokedex Order'},</span>
+                        }
+
                         <span>{shape ? 'Silhouette' : 'No Silhouette'}, </span>
                         <span>{cry ? '' : 'No Cry'}</span>
                     </ul>
