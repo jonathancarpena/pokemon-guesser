@@ -52,7 +52,7 @@ function Layout({ children }) {
     return (
 
         <div className={`  text-black relative  flex items-center justify-center  bg-gray-200 min-h-screen mx-auto`}>
-            {width >= 1980
+            {width >= 1273
                 ? <>
                     <HomeButton isVisible={isVisible()} />
                     {children}
