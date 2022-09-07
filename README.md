@@ -55,6 +55,8 @@ Here 🔗</a>
 
 ## Setup
 
+
+### Install
 Clone down this repository. You will need node and npm installed globally on
 your machine.
 
@@ -66,14 +68,14 @@ $ git clone https://github.com/jonathancarpena/pokemon-guesser.git
 1. Install client packages `cd client` `npm install`
 1. Install server packages `cd server` `npm install`
 
-   ## Environment Variables
+### Environment Variables
 
 To run this project, you will need to add the following environment variables to
 your `.env` file inside the server folder.
 
 `MONGO_URI`: Register a new cluster in MongoDB Atlas and record your Mongo URI
 
-## Scripts
+### Scripts
 
 Development mode. Open http://localhost:3000 to view it in the browser. Server
 will run on PORT:5000
