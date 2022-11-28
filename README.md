@@ -10,11 +10,11 @@
 ## 📸 Screenshots
 
 <ul style="display:flex flex-direction:column">
-<img src="./screenshots/landing.PNG" width="690" height="375" alt="landing"> 
-<img src="./screenshots/loading.PNG" width="690" height="375" alt="loading">
-<img src="./screenshots/difficulty.PNG" width="690" height="375" alt="difficulty">    
-<img src="./screenshots/game.PNG" width="690" height="375" alt="game">    
-<img src="./screenshots/ranking.PNG" width="690" height="375" alt="ranking">
+<img src="./screenshots/landing.PNG" style="max-width:100%; max-height:375px;" alt="landing"> 
+<img src="./screenshots/loading.PNG"style="max-width:100%; max-height:375px;" alt="loading">
+<img src="./screenshots/difficulty.PNG" style="max-width:100%; max-height:375px;" alt="difficulty">    
+<img src="./screenshots/game.PNG" style="max-width:100%; max-height:375px;" alt="game">    
+<img src="./screenshots/ranking.PNG" style="max-width:100%; max-height:375px;" alt="ranking">
 </ul>
 
 ## 🎥 Live Demo
